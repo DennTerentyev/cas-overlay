@@ -391,3 +391,26 @@ the zip file, back up existing policy files files, and install the new, stronger
 
 * Request Throttling
 * Jetty JPA Shared Sessions
+
+
+### Run CAS localy
+
+* change database host "osf.database.url" in "cas.properties" file to service name from docker-compose.yml file
+* add cas service to docker-compose.yml like this
+```
+  cas:
+    image: centerforopenscience/cas:4.1
+    environment:
+      - SOURCE_BRANCH=branch_name
+      - SOURCE_REPO=link_to_rep
+      - DATABASE_HOST=service_name_from_compose_file
+      - CAS_DB_PORT_5432_TCP_PORT=db_port
+      - OSF_DB_PORT_27017_TCP_ADDR=service_name_from_compose_file
+      - OSF_DB_PORT_27017_TCP_PORT=db_port
+      - OSF_DB_NAME=osf20130903
+    depends_on:
+      - postgres
+
+    ports:
+      - 8080:8080
+```
