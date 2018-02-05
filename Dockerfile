@@ -6,6 +6,15 @@ COPY ./ /code
 
 ARG GIT_COMMIT=
 ENV GIT_COMMIT ${GIT_COMMIT}
+ENV OSF_DB_URL="jdbc:postgresql://:postgres::5432/:cas?targetServerType=master"
+ENV OSF_DB_USER="postgres"
+ENV OSF_DB_PASSWORD=""
+ENV DATABASE_HOST="postgres"
+ENV DATABASE_PORT="5432"
+ENV DATABASE_NAME="cas"
+ENV DATABASE_USER="postgres"
+ENV DATABASE_PASSWORD=""
+
 
 # Artifact caching for Multi-stage Builds : https://github.com/carlossg/docker-maven/issues/36
 ENV MAVEN_OPTS=-Dmaven.repo.local=/root/.m2repo/
@@ -50,7 +59,7 @@ RUN echo \
             </Call>\
         </Configure>' >> /var/lib/jetty/webapps/cas.xml
 
-CMD ["java","-jar","/usr/local/jetty/start.jar","-Dcas.properties.filepath=file:/etc/cas/cas.properties","-Dlog4j.configurationFile=file:/etc/cas/log4j2.xml"]
+CMD ["java","-jar","/usr/local/jetty/start.jar","-Dcas.properties.filepath=file:/etc/cas/cas.properties", "-Dlog4j.configurationFile=file:/etc/cas/log4j2.xml"]
 
 ### Dev
 FROM app AS dev
@@ -62,4 +71,4 @@ RUN mvn install jetty:help
 
 ENTRYPOINT []
 
-CMD ["/usr/bin/mvn", "-pl", "cas-server-webapp", "jetty:run"]
+CMD ["/usr/bin/mvn", "-pl", "cas-server-webapp", "jetty:run", "-DOSF_DB_URL=${OSF_DB_URL} -DOSF_DB_USER=${OSF_DB_USER} -DOSF_DB_PASSWORD=${OSF_DB_PASSWORD} -DDATABASE_HOST=${DATABASE_HOST} -DDATABASE_PORT=${DATABASE_PORT} -DDATABASE_NAME=${DATABASE_NAME} -DDATABASE_USER=${DATABASE_USER} -DDATABASE_PASSWORD=${DATABASE_PASSWORD}"]
