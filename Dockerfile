@@ -6,14 +6,14 @@ COPY ./ /code
 
 ARG GIT_COMMIT=
 ENV GIT_COMMIT ${GIT_COMMIT}
-ENV OSF_DB_URL="jdbc:postgresql://:postgres::5432/:cas?targetServerType=master"
-ENV OSF_DB_USER="postgres"
-ENV OSF_DB_PASSWORD=""
-ENV DATABASE_HOST="postgres"
-ENV DATABASE_PORT="5432"
-ENV DATABASE_NAME="cas"
-ENV DATABASE_USER="postgres"
-ENV DATABASE_PASSWORD=""
+ENV OSF_URL="jdbc:postgresql://postgres:5432/cas?targetServerType=master"
+ENV OSF_USER="postgres"
+ENV OSF_PASSWORD=""
+ENV DB_HOST="postgres"
+ENV DB_PORT="5432"
+ENV DB_NAME="cas"
+ENV DB_USER="postgres"
+ENV DB_PASSWORD=""
 
 
 # Artifact caching for Multi-stage Builds : https://github.com/carlossg/docker-maven/issues/36
@@ -71,4 +71,4 @@ RUN mvn install jetty:help
 
 ENTRYPOINT []
 
-CMD ["/usr/bin/mvn", "-pl", "cas-server-webapp", "jetty:run", "-DOSF_DB_URL=${OSF_DB_URL} -DOSF_DB_USER=${OSF_DB_USER} -DOSF_DB_PASSWORD=${OSF_DB_PASSWORD} -DDATABASE_HOST=${DATABASE_HOST} -DDATABASE_PORT=${DATABASE_PORT} -DDATABASE_NAME=${DATABASE_NAME} -DDATABASE_USER=${DATABASE_USER} -DDATABASE_PASSWORD=${DATABASE_PASSWORD}"]
+CMD ["/usr/bin/mvn", "-pl", "cas-server-webapp", "jetty:run", "-DOSF_DB_URL=${OSF_URL}", "-DOSF_DB_USER=${OSF_USER}", "-DOSF_DB_PASSWORD=${OSF_PASSWORD}", "-DDATABASE_HOST=${DB_HOST}", "-DDATABASE_PORT=${DB_PORT}", "-DDATABASE_NAME=${DB_NAME}", "-DDATABASE_USER=${DB_USER}", "-DDATABASE_PASSWORD=${DB_PASSWORD}"]
